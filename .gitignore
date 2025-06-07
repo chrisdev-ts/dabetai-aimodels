@@ -1,1 +1,14 @@
-datatables/
+# Archivos de entorno de Python
+venv/
+__pycache__/
+*.pyc
+
+# Carpeta de datos (opcional, si los datos son muy grandes y no los quieres en el repositorio)
+data/
+
+# Carpeta de modelos (los modelos suelen ser grandes y se generan con el código)
+models/
+
+# Archivos de configuración de IDE
+.vscode/
+.idea/
