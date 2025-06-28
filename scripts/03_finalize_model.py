@@ -25,7 +25,7 @@ def finalizar_y_guardar_modelo(dataset_path, model_output_path):
             (
                 "classifier",
                 LogisticRegression(
-                    random_state=42, max_iter=1000, class_weight="balanced"
+                    C=0.01, random_state=42, max_iter=1000, class_weight="balanced"
                 ),
             ),
         ]
@@ -47,5 +47,5 @@ def finalizar_y_guardar_modelo(dataset_path, model_output_path):
 # --- Ejecutar el Script Principal ---
 if __name__ == "__main__":
     nombre_archivo_dataset = "../data/processed/retinopathy_model_dataset.csv"
-    nombre_archivo_modelo = "../models/rl_prediction_model.joblib"
+    nombre_archivo_modelo = "../models/retinopathy_model.joblib"
     finalizar_y_guardar_modelo(nombre_archivo_dataset, nombre_archivo_modelo)
