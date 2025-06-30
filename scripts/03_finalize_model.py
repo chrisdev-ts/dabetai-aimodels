@@ -1,51 +1,142 @@
 import pandas as pd
+import joblib
 from imblearn.pipeline import Pipeline
+from imblearn.over_sampling import SMOTE
+from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
-from imblearn.over_sampling import SMOTE
-import joblib
+from sklearn.ensemble import AdaBoostClassifier
 
 
-def finalizar_y_guardar_modelo(dataset_path, model_output_path):
+def get_model_pipeline(model_name, hyperparameters):
     """
-    Entrena el pipeline final (Regresión Logística) con todos los datos y lo guarda.
+    Construye y devuelve el pipeline de un modelo específico con sus hiperparámetros.
+
+    Args:
+        model_name (str): El nombre del clasificador ('LogisticRegression' o 'AdaBoost').
+        hyperparameters (dict): Un diccionario con los hiperparámetros para el clasificador.
+
+    Returns:
+        sklearn.pipeline.Pipeline: El pipeline del modelo listo para ser entrenado.
     """
-    print("--- Entrenando el modelo final con todos los datos ---")
 
-    df = pd.read_csv(dataset_path)
+    # Definimos los pasos comunes del preprocesamiento
+    preprocessor_steps = [
+        ("imputer", SimpleImputer(strategy="median")),
+        ("scaler", StandardScaler()),
+        ("smote", SMOTE(random_state=42)),
+    ]
 
-    X = df.drop(columns=["PtID", "Retinopathy_Status"])
-    y = df["Retinopathy_Status"]
+    # Seleccionamos el clasificador basado en el nombre
+    if model_name == "LogisticRegression":
+        classifier = LogisticRegression(
+            random_state=42, max_iter=1000, **hyperparameters
+        )
+    elif model_name == "AdaBoost":
+        classifier = AdaBoostClassifier(random_state=42, **hyperparameters)
+    # elif model_name == 'XGBoost':
+    #     classifier = xgb.XGBClassifier(random_state=42, **hyperparameters)
+    else:
+        raise ValueError(f"Modelo '{model_name}' no reconocido.")
 
-    # Define el pipeline del modelo
-    pipeline_final = Pipeline(
-        [
-            ("scaler", StandardScaler()),
-            ("smote", SMOTE(random_state=42)),
-            (
-                "classifier",
-                LogisticRegression(
-                    C=0.01, random_state=42, max_iter=1000, class_weight="balanced"
-                ),
-            ),
-        ]
+    # Combinamos el preprocesador con el clasificador
+    # AdaBoost funciona mejor sin escalar los datos, así que ajustamos el pipeline
+    if model_name == "AdaBoost":
+        pipeline = Pipeline(
+            [
+                ("imputer", SimpleImputer(strategy="median")),
+                ("smote", SMOTE(random_state=42)),
+                ("classifier", classifier),
+            ]
+        )
+    else:  # Para Regresión Logística y otros, sí escalamos
+        pipeline = Pipeline(
+            [
+                ("imputer", SimpleImputer(strategy="median")),
+                ("scaler", StandardScaler()),
+                ("smote", SMOTE(random_state=42)),
+                ("classifier", classifier),
+            ]
+        )
+
+    return pipeline
+
+
+def finalize_and_save_model(config):
+    """
+    Carga datos, entrena el pipeline final especificado en la configuración
+    con todos los datos y lo guarda en un archivo .joblib.
+    """
+    dataset_path = config["dataset_path"]
+    model_output_path = config["model_output_path"]
+    target_column = config["target_column"]
+    best_model_name = config["best_model"]
+    hyperparameters = config["hyperparameters"]
+
+    print(f"--- Finalizando modelo para: {target_column} ---")
+    print(
+        f"Usando el algoritmo: {best_model_name} con los parámetros: {hyperparameters}"
     )
 
-    # Entrenar el pipeline con todos los datos disponibles
-    pipeline_final.fit(X, y)
+    # Cargar los datos
+    df = pd.read_csv(dataset_path)
+    X = df.drop(columns=["PtID", target_column])
+    y = df[target_column]
 
+    # Obtener el pipeline del modelo ganador
+    final_pipeline = get_model_pipeline(best_model_name, hyperparameters)
+
+    # Entrenar el pipeline con todos los datos disponibles
+    final_pipeline.fit(X, y)
     print("Modelo final entrenado exitosamente.")
 
     # Guardar el pipeline entrenado en un archivo
-    joblib.dump(pipeline_final, model_output_path)
-
-    print(
-        f"\nEl modelo de Regresión Logística ha sido guardado en: '{model_output_path}'"
-    )
+    joblib.dump(final_pipeline, model_output_path)
+    print(f"--> Modelo guardado en: '{model_output_path}'\n")
 
 
-# --- Ejecutar el Script Principal ---
+# --- PANEL DE CONTROL PRINCIPAL ---
 if __name__ == "__main__":
-    nombre_archivo_dataset = "../data/processed/retinopathy_model_dataset.csv"
-    nombre_archivo_modelo = "../models/retinopathy_model.joblib"
-    finalizar_y_guardar_modelo(nombre_archivo_dataset, nombre_archivo_modelo)
+
+    MODELS_CONFIG = [
+        {
+            "complication_name": "retinopathy",
+            "target_column": "Retinopathy_Status",
+            "best_model": "AdaBoost",
+            "hyperparameters": {"learning_rate": 0.1, "n_estimators": 50},
+        },
+        {
+            "complication_name": "nephropathy",
+            "target_column": "Nephropathy_Status",
+            "best_model": "LogisticRegression",
+            "hyperparameters": {"C": 0.01},
+        },
+        {
+            "complication_name": "neuropathy",
+            "target_column": "Neuropathy_Status",
+            "best_model": "LogisticRegression",
+            "hyperparameters": {"C": 0.01},
+        },
+        {
+            "complication_name": "diabetic_foot",
+            "target_column": "Diabetic_Foot_Status",
+            "best_model": "LogisticRegression",
+            "hyperparameters": {"C": 0.01},
+        },
+    ]
+
+    # Bucle para procesar y guardar cada modelo
+    for config in MODELS_CONFIG:
+        # Añadir las rutas de los archivos a la configuración
+        config["dataset_path"] = (
+            f"../data/processed/{config['complication_name']}_model_dataset.csv"
+        )
+        config["model_output_path"] = (
+            f"../models/{config['complication_name']}_model.joblib"
+        )
+
+        finalize_and_save_model(config)
+
+    print("=============================================")
+    print("Todos los modelos han sido finalizados y guardados.")
+    print("=============================================")
