@@ -3,11 +3,20 @@ venv/
 __pycache__/
 *.pyc
 
-# Carpeta de datos (opcional, si los datos son muy grandes y no los quieres en el repositorio)
+# Carpeta de datos
 data/
 
-# Carpeta de modelos (los modelos suelen ser grandes y se generan con el código)
+# Carpeta de modelos
 models/
+
+# Archivos de salida de entrenamiento
+reports/
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+
+# Variables de entorno
+.env
 
 # Archivos de configuración de IDE
 .vscode/
