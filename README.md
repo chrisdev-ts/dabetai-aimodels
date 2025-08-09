@@ -1,229 +1,158 @@
-# dabetai
 
-## Descripción
+# dabetai AI Models - Módulo de inteligencia artificial para predicción de complicaciones diabéticas
 
-dabetai es una plataforma integral para el manejo de la diabetes tipo 1 que combina una aplicación web para profesionales de la salud y una aplicación móvil para pacientes. El sistema utiliza modelos de inteligencia artificial entrenados con datos clínicos y métricas de monitoreo continuo de glucosa (CGM) para predecir complicaciones diabéticas específicas.
+Módulo de machine learning que implementa los modelos predictivos para las complicaciones diabéticas tipo 1, integrados en la plataforma dabetai.
 
-### Complicaciones soportadas
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.11-blue?logo=python" alt="Python version">
+  <img src="https://img.shields.io/badge/scikit-learn-1.3-blue?logo=scikitlearn" alt="scikit-learn version">
+  <img src="https://img.shields.io/badge/LightGBM-3.x-green?logo=lightgbm" alt="LightGBM version">
+  <img src="https://img.shields.io/badge/XGBoost-1.6-orange?logo=xgboost" alt="XGBoost version">
+  <img src="https://img.shields.io/badge/joblib-1.x-yellow" alt="joblib version">
+</p>
 
-- **Retinopatía diabética**: Modelo optimizado con 13 características específicas
-- **Nefropatía diabética**: Modelo con 18 características incluyendo variables renales
-- **Neuropatía diabética**: Modelo con 18 características enfocadas en función neurológica
-- **Pie diabético**: Modelo con 18 características específicas para complicaciones podológicas
+---
 
-### Enfoque técnico del sistema de IA
+## 🤖 ¿Qué es dabetai AI Models?
 
-El módulo de inteligencia artificial implementa un pipeline completo de machine learning que incluye:
+**dabetai AI Models** contiene los pipelines completos para entrenamiento, evaluación y serialización de modelos de machine learning enfocados en predecir:
 
-- Preparación automatizada de datasets con características específicas por complicación
-- Experimentación comparativa con múltiples algoritmos (Regresión Logística, Random Forest, LightGBM, XGBoost, SVM, AdaBoost)
-- Optimización de hiperparámetros mediante búsqueda en grilla
-- Finalización y serialización de modelos optimizados
-- Generación automática de reportes y visualizaciones
+- Retinopatía diabética  
+- Nefropatía diabética  
+- Neuropatía diabética  
+- Pie diabético  
 
-## Estructura del proyecto
+Los modelos se basan en datos clínicos y biométricos del estudio IOBP2 y están optimizados con técnicas avanzadas como balanceo de clases, optimización de hiperparámetros y validación cruzada.
 
-```
-dabetai/
-├── scripts/                     # Scripts de machine learning
-│   ├── 01_prepare_datasets.py   # Preparación modular de datasets
-│   ├── 02_run_experiments.py    # Experimentación y comparación de modelos
-│   └── 03_finalize_model.py     # Finalización de modelos optimizados
-├── data/                        # Datos del proyecto
-│   ├── raw/                     # Datos clínicos originales (IOBP2)
-│   └── processed/               # Datasets procesados por complicación
-├── models/                      # Modelos entrenados (.joblib)
-├── reports/                     # Reportes y visualizaciones
-│   └── figures/                 # Gráficos por complicación
-└── requirements.txt             # Dependencias del proyecto
-```
+---
 
-### Scripts principales
+## ✨ Funcionalidades principales
 
-- **`01_prepare_datasets.py`**: Generación modular de datasets con características específicas por complicación
-- **`02_run_experiments.py`**: Experimentación automatizada con múltiples algoritmos y optimización de hiperparámetros
-- **`03_finalize_model.py`**: Entrenamiento final y serialización de modelos optimizados
+- Preparación modular y automatizada de datasets específicos por complicación  
+- Experimentación comparativa con múltiples algoritmos (Regresión Logística, Random Forest, LightGBM, XGBoost, SVM, AdaBoost)  
+- Optimización de hiperparámetros mediante Grid Search  
+- Entrenamiento final y serialización de modelos  
+- Generación automática de reportes y visualizaciones (ROC, matrices de confusión, importancia de características)  
 
-## Características del sistema
+---
 
-### 🔧 Sistema modular
+## 🛠 Tecnologías
 
-- **Configuración centralizada**: Definición única de algoritmos y complicaciones
-- **Selección automática de características**: Cada complicación utiliza sus características más relevantes
-- **Pipeline flexible**: Escalado automático según el algoritmo seleccionado
+- **Python 3.11+**  
+- **scikit-learn**  
+- **LightGBM**  
+- **XGBoost**  
+- **joblib** para serialización  
+- **imbalanced-learn** para balanceo de clases (SMOTE)  
+- **matplotlib** y **seaborn** para visualización  
 
-### 📊 Características por complicación
+---
 
-- **Retinopatía**: 13 características (demográficas, metabólicas, glucémicas)
-- **Otras complicaciones**: 18 características (incluye variables de comportamiento e insulina)
+## ⚡ Instalación rápida
 
-### 🤖 Algoritmos disponibles
+### Prerrequisitos
 
-- **Regresión Logística** (con escalado automático)
-- **Random Forest**
-- **LightGBM**
-- **XGBoost**
-- **SVM con kernel RBF** (con escalado automático)
-- **AdaBoost**
+- Python 3.11+  
+- pip  
 
-### 📈 Pipeline de ML completo
+### Pasos
 
-1. **Imputación de valores faltantes** (mediana)
-2. **Escalado de características** (cuando es necesario)
-3. **Balanceo de clases** (SMOTE)
-4. **Optimización de hiperparámetros** (GridSearchCV)
-5. **Validación cruzada estratificada**
-6. **Generación de reportes y visualizaciones**
+1. **Clonar repositorio**
 
-## Requisitos
+```bash
+git clone https://github.com/chrisdev-ts/dabetai-aimodels.git
+cd dabetai-aimodels
+````
 
-- Python 3.8 o superior
-- Bibliotecas principales:
-  ```
-  pandas>=1.5.0
-  numpy>=1.21.0
-  scikit-learn>=1.1.0
-  imbalanced-learn>=0.9.0
-  lightgbm>=3.3.0
-  xgboost>=1.6.0
-  matplotlib>=3.5.0
-  seaborn>=0.11.0
-  joblib>=1.1.0
-  ```
-
-Instalar dependencias:
+2. **Instalar dependencias**
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Guía de uso
+---
 
-### 1. Preparación de datasets
+## 📂 Estructura del proyecto
 
-Genera datasets específicos para cada complicación:
+```
+dabetai-aimodels/
+├── scripts/
+│   ├── 01_prepare_datasets.py
+│   ├── 02_run_experiments.py
+│   └── 03_finalize_model.py
+├── data/
+│   ├── raw/
+│   └── processed/
+├── models/
+├── reports/
+│   └── figures/
+└── requirements.txt
+```
+
+---
+
+## 📚 Guía de uso
+
+### 1. Preparar datasets
 
 ```bash
-cd scripts
-python 01_prepare_datasets.py
+python scripts/01_prepare_datasets.py
 ```
 
-**Opciones disponibles:**
-
-- Generar todos los datasets (por defecto)
-- Generar dataset específico: `generar_dataset_especifico("retinopathy")`
-- Ver configuraciones: `mostrar_resumen_configuraciones()`
-
-### 2. Experimentación con modelos
-
-Ejecuta experimentos comparativos automáticos:
+### 2. Ejecutar experimentos
 
 ```bash
-python 02_run_experiments.py
+python scripts/02_run_experiments.py
 ```
 
-**Genera automáticamente:**
-
-- Comparación de todos los algoritmos disponibles
-- Optimización de hiperparámetros
-- Reportes comparativos y del modelo ganador
-- Visualizaciones adaptativas (ROC, importancia de características, matrices de confusión)
-
-### 3. Finalización de modelos
-
-Entrena y guarda los modelos finales optimizados:
+### 3. Finalizar modelos
 
 ```bash
-python 03_finalize_model.py
+python scripts/03_finalize_model.py
 ```
 
-**Configuración actual (modelos ganadores):**
+---
 
-- **Retinopatía**: AdaBoost (learning_rate=0.1, n_estimators=50)
-- **Nefropatía**: Regresión Logística (C=0.01)
-- **Neuropatía**: Regresión Logística (C=0.01)
-- **Pie Diabético**: Regresión Logística (C=0.01)
+## 🩺 Datos requeridos
 
-## Outputs generados
+Los datos se basan en el estudio **IOBP2 (In Control)**. Deben colocarse en `data/raw/datatables/` con los archivos específicos. Consulta el archivo `CITATION.md` para más detalles sobre atribución y uso responsable.
 
-### Datasets procesados
+---
 
-```
-data/processed/
-├── retinopathy_model_dataset.csv    # 13 características
-├── nephropathy_model_dataset.csv    # 18 características
-├── neuropathy_model_dataset.csv     # 18 características
-└── diabetic_foot_model_dataset.csv  # 18 características
-```
+## 🏗 Ecosistema dabetai: nuestros repositorios
 
-### Modelos finalizados
+dabetai está compuesto por múltiples repositorios especializados:
 
-```
-models/
-├── retinopathy_model.joblib
-├── nephropathy_model.joblib
-├── neuropathy_model.joblib
-└── diabetic_foot_model.joblib
-```
+| Repositorio                                                             | Propósito                   | Estado          |
+| ----------------------------------------------------------------------- | --------------------------- | --------------- |
+| **[dabetai-mobileapp](https://github.com/Fermin-Cardenas/dabetai-mobileapp)** | App para pacientes          | ✅ En desarrollo |
+| **[dabetai-webapp](https://github.com/chrisdev-ts/dabetai-webapp)**     | App web para médicos        | ✅ En desarrollo |
+| **[dabetai-aiapi](https://github.com/aleor25/dabetai-aiapi)**           | API de IA y predicciones    | ✅ En desarrollo |
+| **[dabetai-aimodels](https://github.com/chrisdev-ts/dabetai-aimodels)** | Modelos de machine learning | ✅ En desarrollo |
+| **[dabetai-landing](https://github.com/chrisdev-ts/dabetai-landing)**   | Página de aterrizaje        | ✅ En desarrollo |
+| **[dabetai-api](https://github.com/chrisdev-ts/dabetai-api)**                                                         | API principal del backend   | ✅ En desarrollo |
 
-### Reportes y visualizaciones
+---
 
-```
-reports/figures/[Complicación]/
-├── COMPARATIVE_cv_metrics.png       # Métricas de validación cruzada
-├── COMPARATIVE_roc_curves.png       # Curvas ROC comparativas
-├── COMPARATIVE_table.png           # Tabla comparativa de modelos
-├── FINAL_classification_report.png # Reporte del modelo final
-├── FINAL_confusion_matrix.png      # Matriz de confusión
-├── FINAL_feature_importance.png    # Importancia de características
-└── FINAL_roc_curve.png            # Curva ROC del modelo final
-```
+## 🤝 Colaboración interna
 
-## Datos requeridos
+Seguimos convenciones específicas para mantener consistencia - consulta [CONTRIBUTING.MD](CONTRIBUTING.MD).
 
-El sistema requiere datos del estudio **IOBP2 (In Control)** - un ensayo clínico randomizado de diabetes tipo 1. Los datos deben colocarse en `data/raw/datatables/` con los siguientes archivos:
+---
 
-### Archivos necesarios
+## 🤝 Reconocimientos
 
-- `IOBP2DeviceCGM.txt` - Datos de monitoreo continuo de glucosa
-- `IOBP2MedicalCondition.txt` - Condiciones médicas y complicaciones
-- `IOBP2DiabScreening.txt` - Datos de screening y demografía
-- `IOBP2PtRoster.txt` - Información básica de pacientes
-- `IOBP2HeightWeight.txt` - Datos antropométricos
-- `IOBP2RandBaseInfo.txt` - Información de insulina
-- `IOBP2DiabSocioEcon.txt` - Variables socioeconómicas
-- `IOBP2PSHFSAdultNoPart2.txt` - Escalas de miedo a hipoglucemia
-- `IOBP2PST1DDS.txt` - Escalas de angustia por diabetes
+Este proyecto fue desarrollado por el equipo de autores:
 
-### Cómo obtener los datos
+* Cardenas Cabal Fermín
+* Ortiz Pérez Alejandro
+* Serrano Puertos Jorge Christian
 
-Los datos del estudio IOBP2 están disponibles públicamente a través de:
+Con la asesoría y guía conceptual de:
 
-- **JAEB Center for Health Research**: https://public.jaeb.org/dataset/579
-- **Título del dataset**: "The Insulin-Only Bionic Pancreas Pivotal Trial: Testing the iLet in Adults and Children with Type 1 Diabetes"
-- **Registro requerido**: Es necesario completar un formulario con información personal e institucional
+* Guarneros Nolasco Luis Rolando
+* Cruz Ramos Nancy Aracely
 
-### Atribución y uso responsable
+Y con el apoyo académico de la
 
-**⚠️ IMPORTANTE**: Este dataset requiere atribución específica y cumplimiento de condiciones de uso.
-
-**Consulta `CITATION.md` para información detallada sobre atribución requerida, condiciones de uso y uso responsable de los datos.**
-
-## Notas técnicas
-
-- **Reproducibilidad**: Todos los modelos utilizan `random_state=42`
-- **Balanceo de clases**: SMOTE aplicado automáticamente para manejar desbalance
-- **Validación**: Validación cruzada estratificada con 5 folds
-- **Métricas**: AUC-ROC, precisión, recall, F1-score, especificidad
-- **Formato de modelos**: Pipelines completos serializados con joblib
-
-## Documentación adicional
-
-Para información detallada, consulta:
-
-- `GUIA_SISTEMA_MODULARIZADO.md` - Guía completa del sistema modular
-- `CITATION.md` - Atribución del dataset y uso responsable de los datos
-
-## Licencia
-
-Este proyecto está bajo la licencia MIT.
+* Universidad Tecnológica del Centro de Veracruz
